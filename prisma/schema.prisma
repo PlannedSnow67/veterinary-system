@@ -1,0 +1,103 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum RoleName {
+  ADMIN
+  USER
+}
+
+model Role {
+  id        Int      @id @default(autoincrement())
+  name      RoleName
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users User[]
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String
+  password  String
+  phone     String?
+  address   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  id_role       Int
+  role          Role            @relation(fields: [id_role], references: [id])
+  pets          Pet[]
+  appointments  Appointment[]
+  medicalRecord MedicalRecord[]
+}
+
+model Veternarian {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String
+  password  String
+  phone     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  appointments MedicalRecord[]
+}
+
+model Pet {
+  id        Int      @id @default(autoincrement())
+  name      String
+  age       Int
+  breed     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  id_user       Int
+  user          User            @relation(fields: [id_user], references: [id])
+  appointments  Appointment[]
+  medicalRecord MedicalRecord[]
+}
+
+model Appointment {
+  id        Int      @id @default(autoincrement())
+  date      DateTime
+  time      DateTime
+  reason    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  id_user       Int
+  user          User            @relation(fields: [id_user], references: [id])
+  id_pet        Int
+  pet           Pet             @relation(fields: [id_pet], references: [id])
+  medicalRecord MedicalRecord[]
+}
+
+model MedicalRecord {
+  id           Int      @id @default(autoincrement())
+  diagnosis    String
+  prescription String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  id_appointment Int
+  appointment    Appointment @relation(fields: [id_appointment], references: [id])
+  id_veternarian Int
+  veternarian    Veternarian @relation(fields: [id_veternarian], references: [id])
+  id_user        Int
+  user           User        @relation(fields: [id_user], references: [id])
+  id_pet         Int
+  pet            Pet         @relation(fields: [id_pet], references: [id])
+}
