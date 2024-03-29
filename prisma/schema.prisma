@@ -30,14 +30,14 @@ model Role {
 model User {
   id        Int      @id @default(autoincrement())
   name      String
-  email     String
+  email     String   @unique
   password  String
   phone     String?
   address   String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  id_role       Int
+  id_role       Int             @default(2)
   role          Role            @relation(fields: [id_role], references: [id])
   pets          Pet[]
   appointments  Appointment[]
@@ -47,7 +47,7 @@ model User {
 model Veternarian {
   id        Int      @id @default(autoincrement())
   name      String
-  email     String
+  email     String   @unique
   password  String
   phone     String?
   createdAt DateTime @default(now())
