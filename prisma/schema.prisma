@@ -4,6 +4,8 @@
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
+// TODO: Update every model with a status field to handle soft delete
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,6 +13,11 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+enum Status {
+  ACTIVE
+  DELETED
 }
 
 enum RoleName {
@@ -28,12 +35,14 @@ model Role {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String
-  email     String   @unique
-  password  String
-  phone     String?
-  address   String?
+  id       Int     @id @default(autoincrement())
+  name     String
+  email    String  @unique
+  password String
+  phone    String?
+  address  String?
+  status   Status  @default(ACTIVE)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -52,6 +61,7 @@ model Veternarian {
   phone     String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  status    Status   @default(ACTIVE)
 
   appointments MedicalRecord[]
 }
@@ -63,6 +73,7 @@ model Pet {
   breed     String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  status    Status   @default(ACTIVE)
 
   id_user       Int
   user          User            @relation(fields: [id_user], references: [id])

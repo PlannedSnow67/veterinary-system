@@ -37,4 +37,27 @@ export class UserSchema {
         address: this.address,
         id_role: this.id_role
     });
+
+    public paginationSchema = Joi.object({
+        page: Joi.number().integer().min(1).default(1).messages({
+            'number.base': 'Page must be a number',
+            'number.integer': 'Page must be an integer',
+            'number.min': 'Page must be greater than or equal to 1'
+        }),
+        limit: Joi.number().integer().min(1).default(10).messages({
+            'number.base': 'Limit must be a number',
+            'number.integer': 'Limit must be an integer',
+            'number.min': 'Limit must be greater than or equal to 1'
+        })
+    });
+
+    public getUser = Joi.object({
+        id: Joi.number().integer().min(1).required().messages({
+            'number.base': 'Id must be a number',
+            'number.integer': 'Id must be an integer',
+            'number.min': 'Id must be greater than or equal to 1',
+            'any.required': 'Id is a required field'
+        })
+    });
+
 }
