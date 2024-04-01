@@ -1,4 +1,5 @@
 import { CustomError } from '../'
+import { UserEntity } from '../../domain';
 import { Prisma, UserInput } from "../../data";
 
 
@@ -18,14 +19,14 @@ export class UserService {
                     take: limit
                 })
             ]);
-            // TODO: return a entity instead of the user data from the database
+            const usersData = users.map(user =>  UserEntity.fromPrisma(user) );
             return {
                 page,
                 limit,
                 total,
                 next: Math.ceil(total / limit) > page ? `/api/users?page=${page + 1}&limit=${limit}`: null,
                 previous: (page - 1 > 0 && users.length > 0 ) ? `/api/users?page=${page - 1}&limit=${limit}` : null,
-                users
+                data: usersData
             }
         } catch (error) {
             throw CustomError.internalServer('Error getting users');
@@ -42,8 +43,7 @@ export class UserService {
         });
         if (!user) throw CustomError.notFound('User not found');
         try {
-            // TODO: return a entity instead of the user data from the database
-            return { user };
+            return { data: UserEntity.fromPrisma(user) };
         } catch (error) {
             throw CustomError.internalServer('Error getting user');
         }
@@ -83,10 +83,12 @@ export class UserService {
         try {
             const updatedUser = await Prisma.user.update({
                 where: {id},
-                data: newData
+                data: newData,
+                include: {
+                    role: true
+                }
             });
-            // TODO: return a entity instead of the user data from the database
-            return {updatedUser};
+            return {data: UserEntity.fromPrisma(updatedUser)};
         } catch (error) {
             throw CustomError.internalServer('Error updating user');
         }
@@ -98,9 +100,12 @@ export class UserService {
         try {
             const softDelete = await Prisma.user.update({
                 where: { id },
-                data: { status: 'DELETED' }
+                data: { status: 'DELETED' },
+                include: {
+                    role: true
+                }
             });
-            return softDelete;
+            return UserEntity.fromPrisma(softDelete);
         } catch (error) {
             throw CustomError.internalServer('Error deleting user');
         }
