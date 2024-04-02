@@ -53,7 +53,7 @@ model User {
   medicalRecord MedicalRecord[]
 }
 
-model Veternarian {
+model Veterinarian {
   id        Int      @id @default(autoincrement())
   name      String
   email     String   @unique
@@ -104,11 +104,11 @@ model MedicalRecord {
   updatedAt    DateTime @updatedAt
 
   id_appointment Int
-  appointment    Appointment @relation(fields: [id_appointment], references: [id])
+  appointment    Appointment  @relation(fields: [id_appointment], references: [id])
   id_veternarian Int
-  veternarian    Veternarian @relation(fields: [id_veternarian], references: [id])
+  veternarian    Veterinarian @relation(fields: [id_veternarian], references: [id])
   id_user        Int
-  user           User        @relation(fields: [id_user], references: [id])
+  user           User         @relation(fields: [id_user], references: [id])
   id_pet         Int
-  pet            Pet         @relation(fields: [id_pet], references: [id])
+  pet            Pet          @relation(fields: [id_pet], references: [id])
 }

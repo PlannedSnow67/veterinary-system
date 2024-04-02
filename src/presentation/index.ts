@@ -7,3 +7,7 @@ export * from './schemas/user.schema';
 export * from './middlewares/validate-schema';
 export * from './utils/handle-error';
 export * from './utils/custom-errors';
+export * from './veterinarian/routes';
+export * from './veterinarian/controller';
+export * from './services/veterinarian.service';
+export * from './schemas/veterinarian.schema';

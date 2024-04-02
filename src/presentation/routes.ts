@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import {UserRoutes} from './'
+import { UserRoutes, VeterinarianRoutes} from './'
 
 export class Routes {
     
@@ -11,6 +11,7 @@ export class Routes {
         });
 
         router.use('/api/users', UserRoutes.routes);
+        router.use('/api/veterinarians', VeterinarianRoutes.routes);
 
         return router;
     }
