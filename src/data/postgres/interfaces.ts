@@ -13,3 +13,10 @@ export interface VetInput {
     password: string;
     phone: string;
 }
+
+export interface PetInput {
+    name: string;
+    age: number;
+    breed: string;
+    id_user: number;
+}

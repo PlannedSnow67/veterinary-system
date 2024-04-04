@@ -1,6 +1,7 @@
 import Joi from 'joi';
+import { FatherSchema } from './base.schema';
 
-export class UserSchema {
+export class UserSchema extends FatherSchema{
     private readonly name = Joi.string().required().messages({
         'string.base': 'name should be a type of text',
         'string.empty': 'name cannot be an empty field',
@@ -36,19 +37,6 @@ export class UserSchema {
         phone: this.phone,
         address: this.address,
         id_role: this.id_role
-    });
-
-    public paginationSchema = Joi.object({
-        page: Joi.number().integer().min(1).default(1).messages({
-            'number.base': 'Page must be a number',
-            'number.integer': 'Page must be an integer',
-            'number.min': 'Page must be greater than or equal to 1'
-        }),
-        limit: Joi.number().integer().min(1).default(10).messages({
-            'number.base': 'Limit must be a number',
-            'number.integer': 'Limit must be an integer',
-            'number.min': 'Limit must be greater than or equal to 1'
-        })
     });
 
     public getUser = Joi.object({

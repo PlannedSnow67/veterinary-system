@@ -11,3 +11,7 @@ export * from './veterinarian/routes';
 export * from './veterinarian/controller';
 export * from './services/veterinarian.service';
 export * from './schemas/veterinarian.schema';
+export * from './pet/routes';
+export * from './pet/controller';
+export * from './services/pet.service';
+export * from './schemas/pet.schema';

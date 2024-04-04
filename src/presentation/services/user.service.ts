@@ -38,7 +38,8 @@ export class UserService {
         const user = await Prisma.user.findUnique({
             where: { id, status: {equals: 'ACTIVE'} },
             include: {
-                role: true
+                role: true,
+                pets: true
             }
         });
         if (!user) throw CustomError.notFound('User not found');
@@ -68,8 +69,7 @@ export class UserService {
                     }
                 }
             });
-            // TODO: return a entity instead of the user data from the database
-            return { newUser };
+            return {data: UserEntity.fromPrisma(newUser)};
         } catch (error) {
             throw CustomError.internalServer('Error creating user');
         }
